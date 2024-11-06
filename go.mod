@@ -3,6 +3,7 @@ module github.com/shapeshed/gasstation
 go 1.23
 
 require (
+	github.com/BurntSushi/toml v1.2.1
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.8
 	google.golang.org/grpc v1.63.2

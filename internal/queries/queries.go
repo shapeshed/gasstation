@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/cenkalti/backoff/v4"
-	ssbackoff "github.com/shapeshed/servicestation/internal/backoff"
+	ssbackoff "github.com/shapeshed/gasstation/internal/backoff"
 
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
