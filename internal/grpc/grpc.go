@@ -8,15 +8,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
-
-	"github.com/cosmos/cosmos-sdk/codec"
 )
 
 // SetupGRPCConnection establishes a GRPC connection, optionally using system's TLS certificates
 func SetupGRPCConnection(address string, useTLS bool) (*grpc.ClientConn, error) {
 	var opts []grpc.DialOption
-
-	opts = append(opts, grpc.WithDefaultCallOptions(grpc.ForceCodec(codec.NewProtoCodec(nil).GRPCCodec())))
 
 	if useTLS {
 		// Load the system's certificate pool
