@@ -38,7 +38,7 @@ go mod tidy
 make
 ```
 
-A binary will be created at ./bin/gastation
+A binary will be created at `./bin/gastation`.
 
 ## Configuration
 
