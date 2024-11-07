@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 1
+
+env:
+  - CGO_ENABLED=0  # Disable CGO if you don't need it for simpler builds
+
+builds:
+  - id: gasstation
+    main: ./cmd/gasstation
+    binary: gasstation
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -mod=readonly
+      - -trimpath
+    ldflags:
+      - -X 'main.Version={{.Version}}'
+      - -X 'main.BuildDate={{.Date}}'
+      - -X 'main.Commit={{.Commit}}'
+      - -w -s  # Remove debug information to reduce binary size
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+  groups:
+    - title: Added
+      regexp: "^.*(?i)Add.*$"
+      order: 0
+    - title: 'Changed'
+      regexp: "^(?i).*(Change|Refactor).*$"
+      order: 1
+    - title: 'Deprecated'
+      regexp: "^.*(?i)Deprecate.*$"
+      order: 3
+    - title: 'Removed'
+      regexp: "^.*(?i)Remove.*$"
+      order: 4
+    - title: 'Fixed'
+      regexp: "^.*(?i)Fix.*$"
+      order: 5
+    - title: 'Security'
+      regexp: "^.*(?i)Bump.*$"
+      order: 6
+    - title: Others
+      order: 999
+
+release:
+  name_template: "v{{ .Version }}"
+  footer: |
+    **Full Changelog**: https://github.com/your-org/your-repo/compare/{{ .PreviousTag }}...{{ if .IsNightly }}nightly{{ else }}{{ .Tag }}{{ end }}
+
