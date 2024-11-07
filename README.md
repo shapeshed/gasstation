@@ -33,12 +33,8 @@ Pre-built releases are available on the [Releases][4] page.
 ## Installation
 
 ```sh
-git clone https://github.com/shapeshed/gasstation.git
-go mod tidy
-make
+go install github.com/shapeshed/gasstation/cmd/gasstation@latest
 ```
-
-A binary will be created at `./bin/gastation`.
 
 ## Configuration
 
@@ -91,6 +87,19 @@ with the `LOG_LEVEL` environment variable.
 ```sh
 LOG_LEVEL=debug gasstation -c configs/config.toml
 ```
+
+## Contributing
+
+If you want to hack on gas station and contribute to the project you can get the
+source and build the project as follows.
+
+```sh
+git clone https://github.com/shapeshed/gasstation.git
+go mod tidy
+make
+```
+
+The binary will be created at `./bin/gastation`.
 
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
