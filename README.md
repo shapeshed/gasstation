@@ -34,7 +34,7 @@ Gas Station accepts a configuration file on startup via the `-c` flag.
 gasstation -c configs/config.toml
 ```
 
-An example config file is provided in `configs/config.toml.example`
+An example config file is provided in [`configs/config.toml.example`][3]
 
 ```toml
 [[chains]]
@@ -69,9 +69,6 @@ frequency        = 60
 | **amount_to_fund**   | The amount to send when topping up an account. The amount is specified in the chain's gas denomination (e.g., `1000000` units of `untrn`).                   |
 | **frequency**        | The interval (in seconds) at which Gas Tank checks account balances.                                                                                         |
 
-[1]: https://prometheus.io/
-[2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
-
 ## Logging
 
 Gas Station logs some information whilst running. Log levels can be increased
@@ -80,3 +77,7 @@ with the `LOG_LEVEL` environment variable.
 ```sh
 LOG_LEVEL=debug gasstation -c configs/config.toml
 ```
+
+[1]: https://prometheus.io/
+[2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
+[3]: configs/config.toml.example
