@@ -59,4 +59,4 @@ changelog:
 release:
   name_template: "v{{ .Version }}"
   footer: |
-    **Full Changelog**: https://github.com/your-org/your-repo/compare/{{ .PreviousTag }}...{{ if .IsNightly }}nightly{{ else }}{{ .Tag }}{{ end }}
+    **Full Changelog**: https://github.com/shapeshed/gasstation/compare/{{ .PreviousTag }}...{{ if .IsNightly }}nightly{{ else }}{{ .Tag }}{{ end }}
