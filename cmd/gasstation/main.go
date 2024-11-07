@@ -2,25 +2,28 @@ package main
 
 import (
 	"context"
-	"log/slog"
+	"log"
 	"math/rand"
-	"os"
+	"sync"
 	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/shapeshed/cosmosign"
 	"github.com/shapeshed/gasstation/internal/grpc"
+	"github.com/shapeshed/gasstation/internal/logger"
 	"github.com/shapeshed/gasstation/internal/queries"
+	"go.uber.org/zap"
 
 	sdkmath "cosmossdk.io/math"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module/testutil"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
-// ChainConfig represents the configuration for each chain in the TOML file.
+// Chain represents the configuration for each chain in the TOML file.
 type Chain struct {
 	Name           string   `toml:"name"`
 	AddressPrefix  string   `toml:"address_prefix"`
@@ -35,6 +38,7 @@ type Chain struct {
 	Accounts       []string `toml:"accounts"`
 	Threshold      int64    `toml:"threshold"`
 	AmountToFund   int64    `toml:"amount_to_fund"`
+	Frequency      int      `toml:"frequency"`
 }
 
 // Config represents the entire configuration file.
@@ -44,31 +48,45 @@ type Config struct {
 
 // ChainService represents a balance-checking service for a single chain.
 type ChainService struct {
-	chain           Chain
-	keyring         keyring.Keyring
-	bankQueryClient banktypes.QueryClient
-	cosmosignClient *cosmosign.Cosmosign
-	ticker          *time.Ticker
-	rand            *rand.Rand
+	accountQueryClient authtypes.QueryClient
+	chain              Chain
+	keyring            keyring.Keyring
+	bankQueryClient    banktypes.QueryClient
+	cosmosignClient    *cosmosign.Cosmosign
+	ticker             *time.Ticker
+	rand               *rand.Rand
+	logger             *zap.Logger
 }
 
 // NewChainService initializes a new ChainService with a gRPC client, timer, and Cosmosign client.
-func NewChainService(chain Chain, interval time.Duration) (*ChainService, error) {
+func NewChainService(chain Chain, interval time.Duration, l *zap.Logger) (*ChainService, error) {
+	ctx := context.Background()
+
+	// Initialize a GRPC connection
 	conn, err := grpc.SetupGRPCConnection(chain.GRPCURL, false)
 	if err != nil {
 		return nil, err
 	}
 
+	// Create a bank query client
 	bankQueryClient := banktypes.NewQueryClient(conn)
 
+	// Fetch and set the account prefix
+	accountQueryClient := authtypes.NewQueryClient(conn)
+	prefix, err := accountQueryClient.Bech32Prefix(ctx, &authtypes.Bech32PrefixRequest{})
+	if err != nil {
+		return nil, err
+	}
+	chain.AddressPrefix = prefix.Bech32Prefix
+
+	// Initialize the keyring
 	encodingConfig := testutil.MakeTestEncodingConfig()
 	chainKeyring, err := keyring.New(chain.KeyringAppName, chain.KeyringBackend, chain.KeyringRootDir, nil, encodingConfig.Codec)
 	if err != nil {
 		return nil, err
 	}
 
-	slog.Info("chain", slog.Any("chain", chain))
-
+	// Initialize a cosmosign client
 	cosmosignClient, err := cosmosign.NewClient(context.Background(),
 		cosmosign.WithGRPCConn(conn),
 		cosmosign.WithGasMultipler(chain.GasMultipler),
@@ -77,28 +95,29 @@ func NewChainService(chain Chain, interval time.Duration) (*ChainService, error)
 		cosmosign.WithKeyringAppName(chain.KeyringAppName),
 		cosmosign.WithKeyringRootDir(chain.KeyringRootDir),
 		cosmosign.WithKeyringUID(chain.KeyringUID),
-		cosmosign.WithAddressPrefix(chain.AddressPrefix),
 	)
 	if err != nil {
 		return nil, err
 	}
 
+	// Return the chain service
 	return &ChainService{
-		chain:           chain,
-		bankQueryClient: bankQueryClient,
-		cosmosignClient: cosmosignClient,
-		keyring:         chainKeyring,
-		ticker:          time.NewTicker(interval),
-		rand:            rand.New(rand.NewSource(time.Now().UnixNano())),
+		chain:              chain,
+		accountQueryClient: accountQueryClient,
+		bankQueryClient:    bankQueryClient,
+		cosmosignClient:    cosmosignClient,
+		keyring:            chainKeyring,
+		ticker:             time.NewTicker(interval),
+		rand:               rand.New(rand.NewSource(time.Now().UnixNano())),
+		logger:             l,
 	}, nil
 }
 
 // Run starts the periodic balance check for the ChainService, with a randomized delay at the start.
 func (cs *ChainService) Run(ctx context.Context) {
-	// Generate a random delay up to 10 seconds
-	randomDelay := time.Duration(cs.rand.Intn(10)) * time.Second
-	slog.Info("Randomized start delay", "chain", cs.chain.Name, "delay", randomDelay)
-	time.Sleep(randomDelay) // Initial random delay
+	randomDelay := time.Duration(cs.rand.Intn(cs.chain.Frequency)) * time.Second
+	cs.logger.Info("Randomized start delay", zap.String("chain", cs.chain.Name), zap.Duration("delay", randomDelay))
+	time.Sleep(randomDelay)
 
 	for {
 		select {
@@ -111,55 +130,53 @@ func (cs *ChainService) Run(ctx context.Context) {
 	}
 }
 
-// checkBalances checks the balance for each account and sends a transaction if below the threshold.
+// checkBalances checks the balance for each account and sends a bank transaction if below the threshold.
 func (cs *ChainService) checkBalances(ctx context.Context) {
 	for _, account := range cs.chain.Accounts {
 		balance, err := queries.GetBalance(ctx, cs.bankQueryClient, account, cs.chain.GasDenom)
 		if err != nil {
-			slog.Error("Error retrieving balance", "chain", cs.chain.Name, "account", account, "error", err)
+			cs.logger.Error("Error retrieving balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
 			continue
 		}
-		slog.Info("balance", "balance", balance)
+		cs.logger.Info("balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Any("balance", balance))
 
 		threshold := sdkmath.NewInt(cs.chain.Threshold)
 		if balance.Balance.Amount.LT(threshold) {
-			slog.Info("Balance is less than threshold, funding required", "chain", cs.chain.Name, "account", account)
-
-			_ = cs.cosmosignClient.ApplyOptions(
-				cosmosign.WithAddressPrefix(cs.chain.AddressPrefix),
-			)
+			cs.logger.Info("Balance is less than threshold, funding required", zap.String("chain", cs.chain.Name), zap.String("account", account))
 
 			signer, err := cs.keyring.Key(cs.chain.KeyringUID)
 			if err != nil {
-				slog.Error("Error getting signer", "chain", cs.chain.Name, "account", account, "error", err)
+				cs.logger.Error("Error getting signer", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
 				continue
 			}
 
-			signerAddr, err := signer.GetAddress()
-			if err != nil {
-				slog.Error("Error getting signer address", "chain", cs.chain.Name, "account", account, "error", err)
-				continue
+			pk, _ := signer.GetPubKey()
+			addressBytes := sdktypes.AccAddress(pk.Address().Bytes())
+			signerAddress, _ := sdktypes.Bech32ifyAddressBytes(cs.chain.AddressPrefix, addressBytes)
+			cs.logger.Info("address", zap.String("signerAddress", signerAddress), zap.String("account", account), zap.String("prefix", cs.chain.AddressPrefix))
+
+			msg := &banktypes.MsgSend{
+				FromAddress: signerAddress,
+				ToAddress:   account,
+				Amount:      sdktypes.NewCoins(sdktypes.NewCoin(cs.chain.GasDenom, sdkmath.NewInt(cs.chain.AmountToFund))),
 			}
 
-			// Create MsgSend transaction message
-			msg := banktypes.NewMsgSend(
-				signerAddr,
-				sdktypes.MustAccAddressFromBech32(account),
-				sdktypes.NewCoins(sdktypes.NewCoin(cs.chain.GasDenom, sdkmath.NewInt(cs.chain.AmountToFund))),
-			)
+			cs.logger.Info("msg", zap.Any("msg", msg))
+
+			cs.logger.Info("cosmosign", zap.Any("cosmosign", cs.cosmosignClient))
 
 			// Send the message using Cosmosign
 			res, err := cs.cosmosignClient.SendMessages(msg)
 			switch {
 			case err != nil:
-				slog.Error("Failed to send transaction", "error", err)
+				cs.logger.Error("Failed to send transaction", zap.Error(err))
 			case res.TxResponse.Code == 0:
-				slog.Info("Transaction successful", "transaction hash", res.TxResponse.TxHash)
+				cs.logger.Info("Transaction successful", zap.String("transaction hash", res.TxResponse.TxHash), zap.String("chain", cs.chain.Name), zap.String("account", account))
 			default:
-				slog.Info("Transaction failed", "code", res.TxResponse.Code, "raw_log", res.TxResponse.RawLog)
+				cs.logger.Info("Transaction failed", zap.Uint32("code", res.TxResponse.Code), zap.String("raw_log", res.TxResponse.RawLog))
 			}
 		} else {
-			slog.Info("Balance is sufficient", "chain", cs.chain.Name, "account", account, "balance", balance.Balance.Amount)
+			cs.logger.Info("Balance ok", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.String("balance", balance.Balance.Amount.String()))
 		}
 	}
 }
@@ -173,31 +190,47 @@ func loadConfig(path string) (*Config, error) {
 }
 
 func main() {
+	// Initialize zap logger
+	l, err := logger.Setup()
+	if err != nil {
+		log.Fatalf("Failed to initialize zap logger: %v", err)
+	}
+
 	// Load configuration from TOML
 	config, err := loadConfig("configs/config.toml")
 	if err != nil {
-		slog.Error("Failed to load configuration", "error", err)
-		os.Exit(1)
+		l.Error("Failed to load configuration", zap.Error(err))
 	}
 
-	// Initialize logger
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
-	slog.SetDefault(logger)
-
 	ctx := context.Background()
+	l.Debug("Starting Gas Station", zap.Any("config", config))
+
+	// Use WaitGroup to manage concurrent startup of ChainServices
+	var wg sync.WaitGroup
 
 	// Initialize and run a ChainService for each chain configuration
 	for _, chain := range config.Chains {
-		chainService, err := NewChainService(chain, 10*time.Second) // Adjust the interval as needed
-		if err != nil {
-			slog.Error("Error initializing ChainService", "chain", chain.Name, "error", err)
-			continue
-		}
+		wg.Add(1) // Add a goroutine to the WaitGroup
 
-		// Run the service in a separate goroutine with a randomized start delay
-		go chainService.Run(ctx)
+		// Start each ChainService in its own goroutine
+		go func(chain Chain) {
+			defer wg.Done() // Signal WaitGroup when this goroutine is complete
+
+			// Initialize ChainService
+			chainService, err := NewChainService(chain, time.Duration(chain.Frequency)*time.Second, l)
+			if err != nil {
+				l.Error("Error initializing ChainService", zap.String("chain", chain.Name), zap.Error(err))
+				return
+			}
+
+			// Run the service with context
+			chainService.Run(ctx)
+		}(chain)
 	}
 
-	// Block forever (or use `select {}`) to keep the main function running
+	// Wait for all goroutines to start
+	wg.Wait()
+
+	// Keep the main function running
 	select {}
 }
