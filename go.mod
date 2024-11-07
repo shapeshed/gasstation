@@ -7,7 +7,8 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.10
-	github.com/shapeshed/cosmosign v0.1.2
+	github.com/shapeshed/cosmosign v0.2.0
+	go.uber.org/zap v1.24.0
 	google.golang.org/grpc v1.67.1
 )
 
@@ -135,6 +136,7 @@ require (
 	github.com/zondax/hid v0.9.2 // indirect
 	github.com/zondax/ledger-go v0.14.3 // indirect
 	go.etcd.io/bbolt v1.3.10 // indirect
+	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0 // indirect
@@ -154,5 +156,3 @@ require (
 	pgregory.net/rapid v1.1.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
-
-replace github.com/shapeshed/cosmosign => ../cosmosign
