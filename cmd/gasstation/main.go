@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"sync"
 	"time"
 
@@ -56,6 +59,20 @@ type ChainService struct {
 	ticker             *time.Ticker
 	rand               *rand.Rand
 	logger             *zap.Logger
+}
+
+var (
+	// version and buildDate is set with -ldflags in the Makefile
+	Version     string
+	BuildDate   string
+	configPath  *string
+	showVersion *bool
+)
+
+func parseFlags() {
+	configPath = flag.String("c", "config.toml", "path to config file")
+	showVersion = flag.Bool("v", false, "Print the version of the program")
+	flag.Parse()
 }
 
 // NewChainService initializes a new ChainService with a gRPC client, timer, and Cosmosign client.
@@ -190,6 +207,12 @@ func loadConfig(path string) (*Config, error) {
 }
 
 func main() {
+	parseFlags()
+	if *showVersion {
+		fmt.Printf("Version: %s\nBuild Date: %s\n", Version, BuildDate)
+		os.Exit(0)
+	}
+
 	// Initialize zap logger
 	l, err := logger.Setup()
 	if err != nil {
@@ -197,7 +220,7 @@ func main() {
 	}
 
 	// Load configuration from TOML
-	config, err := loadConfig("configs/config.toml")
+	config, err := loadConfig(*configPath)
 	if err != nil {
 		l.Error("Failed to load configuration", zap.Error(err))
 	}
