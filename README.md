@@ -85,7 +85,7 @@ Gas Station logs some information whilst running. Log levels can be increased
 with the `LOG_LEVEL` environment variable.
 
 ```sh
-LOG_LEVEL=debug gasstation -c configs/config.toml
+LOG_LEVEL=debug gasstation -c ~/.config/gasstation/config.toml
 ```
 
 ## Contributing
