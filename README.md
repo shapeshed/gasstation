@@ -33,7 +33,9 @@ Pre-built releases are available on the [Releases][4] page.
 ## Installation
 
 ```sh
-go install github.com/shapeshed/gasstation/cmd/gasstation@latest
+VERSION=$(git describe --tags --always --dirty --match=v\* 2> /dev/null || echo v0)
+DATE=$(date +%FT%T%z)
+go install -ldflags="-X main.Version=$VERSION -X main.BuildDate=$DATE" github.com/shapeshed/gasstation/cmd/gasstation@latest
 ```
 
 ## Configuration
