@@ -26,6 +26,20 @@ risk of them running out of gas.
 > Ensure that the account used for issuing automated bank transactions is
 > actively monitored.
 
+## Releases
+
+Pre-built releases are available on the [Releases][4] page.
+
+## Installation
+
+```sh
+git clone https://github.com/shapeshed/gasstation.git
+go mod tidy
+make
+```
+
+A binary will be created at ./bin/gastation
+
 ## Configuration
 
 Gas Station accepts a configuration file on startup via the `-c` flag.
@@ -81,3 +95,4 @@ LOG_LEVEL=debug gasstation -c configs/config.toml
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
 [3]: configs/config.toml.example
+[4]: releases
