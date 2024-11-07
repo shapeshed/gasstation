@@ -90,11 +90,11 @@ LOG_LEVEL=debug gasstation -c configs/config.toml
 
 ## Contributing
 
-If you want to hack on gas station and contribute to the project you can get the
-source and build the project as follows.
+Contributions to the project are welcome!
 
 ```sh
 git clone https://github.com/shapeshed/gasstation.git
+cd gasstation
 go mod tidy
 make
 ```
