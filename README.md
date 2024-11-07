@@ -1,9 +1,30 @@
 # Gas Station
 
-Monitor Cosmos account balances and send tokens if an account falls below a
-balance threshold.
+Automated gas token management for Cosmos accounts.
 
 ![Gas Station](assets/gasstation.png)
+
+## Rationale
+
+Gas Tank was developed to address the challenge of running multiple Cosmos-based
+bots and ensuring they consistently maintain sufficient funds for gas fees.
+
+While it is possible to monitor account balances with tools like [Prometheus][1]
+using [Cosmos Wallet Exporter][2] these tools only generate alerts when an
+account balance falls below a specified threshold. In such a setup, a human
+operator must manually respond to each alert and send a bank transaction to
+replenish each account, making it a time-intensive process prone to delays and
+error.
+
+Gas Tank largely automates this process by continuously monitoring account
+balances and automatically initiating a bank transaction when an account’s
+balance falls below a designated threshold. This automation reduces the need for
+manual intervention, helping to keep bots running smoothly and minimizing the
+risk of them running out of gas.
+
+> [!NOTE]\
+> Ensure that the account used for issuing automated bank transactions is
+> actively monitored.
 
 ## Configuration
 
@@ -41,28 +62,6 @@ frequency        = 60
 | **threshold**        | The minimum balance threshold for each account. When an account's balance drops below this level, Gas Tank will send a specified amount to replenish it.     |
 | **amount_to_fund**   | The amount to send when topping up an account. The amount is specified in the chain's gas denomination (e.g., `1000` units of `untrn`).                      |
 | **frequency**        | The interval (in seconds) at which Gas Tank checks account balances.                                                                                         |
-
-## Rationale
-
-Gas Tank was developed to address the challenge of running multiple Cosmos-based
-bots and ensuring they consistently maintain sufficient funds for gas fees.
-
-While it is possible to monitor account balances with tools like [Prometheus][1]
-using [Cosmos Wallet Exporter][2] these tools only generate alerts when an
-account balance falls below a specified threshold. In such a setup, a human
-operator must manually respond to each alert and send a bank transaction to
-replenish each account, making it a time-intensive process prone to delays and
-error.
-
-Gas Tank largely automates this process by continuously monitoring account
-balances and automatically initiating a bank transaction when an account’s
-balance falls below a designated threshold. This automation reduces the need for
-manual intervention, helping to keep bots running smoothly and minimizing the
-risk of them running out of gas.
-
-> [!NOTE]\
-> Ensure that the account used for issuing automated bank transactions is
-> actively monitored.
 
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
