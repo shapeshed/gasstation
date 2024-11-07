@@ -155,7 +155,7 @@ func (cs *ChainService) checkBalances(ctx context.Context) {
 			cs.logger.Error("Error retrieving balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
 			continue
 		}
-		cs.logger.Info("balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Any("balance", balance))
+		cs.logger.Debug("balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Any("balance", balance))
 
 		threshold := sdkmath.NewInt(cs.chain.Threshold)
 		if balance.Balance.Amount.LT(threshold) {
@@ -170,7 +170,7 @@ func (cs *ChainService) checkBalances(ctx context.Context) {
 			pk, _ := signer.GetPubKey()
 			addressBytes := sdktypes.AccAddress(pk.Address().Bytes())
 			signerAddress, _ := sdktypes.Bech32ifyAddressBytes(cs.chain.AddressPrefix, addressBytes)
-			cs.logger.Info("address", zap.String("signerAddress", signerAddress), zap.String("account", account), zap.String("prefix", cs.chain.AddressPrefix))
+			cs.logger.Debug("address", zap.String("signerAddress", signerAddress), zap.String("account", account), zap.String("prefix", cs.chain.AddressPrefix))
 
 			msg := &banktypes.MsgSend{
 				FromAddress: signerAddress,
@@ -178,9 +178,7 @@ func (cs *ChainService) checkBalances(ctx context.Context) {
 				Amount:      sdktypes.NewCoins(sdktypes.NewCoin(cs.chain.GasDenom, sdkmath.NewInt(cs.chain.AmountToFund))),
 			}
 
-			cs.logger.Info("msg", zap.Any("msg", msg))
-
-			cs.logger.Info("cosmosign", zap.Any("cosmosign", cs.cosmosignClient))
+			cs.logger.Debug("msg", zap.Any("msg", msg))
 
 			// Send the message using Cosmosign
 			res, err := cs.cosmosignClient.SendMessages(msg)
