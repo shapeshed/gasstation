@@ -139,7 +139,9 @@ func (cs *ChainService) Run(ctx context.Context) {
 	for {
 		select {
 		case <-cs.ticker.C:
-			cs.checkBalances(ctx)
+			if err := cs.checkBalances(ctx); err != nil {
+				cs.logger.Error("Error checking balances", zap.String("chain", cs.chain.Name), zap.Error(err))
+			}
 		case <-ctx.Done():
 			cs.ticker.Stop()
 			return
@@ -148,12 +150,12 @@ func (cs *ChainService) Run(ctx context.Context) {
 }
 
 // checkBalances checks the balance for each account and sends a bank transaction if below the threshold.
-func (cs *ChainService) checkBalances(ctx context.Context) {
+func (cs *ChainService) checkBalances(ctx context.Context) error {
 	for _, account := range cs.chain.Accounts {
 		balance, err := queries.GetBalance(ctx, cs.bankQueryClient, account, cs.chain.GasDenom)
 		if err != nil {
 			cs.logger.Error("Error retrieving balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
-			continue
+			return err
 		}
 		cs.logger.Debug("balance", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Any("balance", balance))
 
@@ -164,7 +166,7 @@ func (cs *ChainService) checkBalances(ctx context.Context) {
 			signer, err := cs.keyring.Key(cs.chain.KeyringUID)
 			if err != nil {
 				cs.logger.Error("Error getting signer", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
-				continue
+				return err
 			}
 
 			pk, _ := signer.GetPubKey()
@@ -182,18 +184,22 @@ func (cs *ChainService) checkBalances(ctx context.Context) {
 
 			// Send the message using Cosmosign
 			res, err := cs.cosmosignClient.SendMessages(msg)
-			switch {
-			case err != nil:
+			if err != nil {
 				cs.logger.Error("Failed to send transaction", zap.Error(err))
-			case res.TxResponse.Code == 0:
-				cs.logger.Info("Transaction successful", zap.String("transaction hash", res.TxResponse.TxHash), zap.String("chain", cs.chain.Name), zap.String("account", account))
-			default:
-				cs.logger.Info("Transaction failed", zap.Uint32("code", res.TxResponse.Code), zap.String("raw_log", res.TxResponse.RawLog))
+				return err
 			}
+			if res.TxResponse.Code != 0 {
+				err = fmt.Errorf("transaction failed with code %d: %s", res.TxResponse.Code, res.TxResponse.RawLog)
+				cs.logger.Error("Transaction failed", zap.Error(err))
+				return err
+			}
+
+			cs.logger.Info("Transaction successful", zap.String("transaction hash", res.TxResponse.TxHash), zap.String("chain", cs.chain.Name), zap.String("account", account))
 		} else {
 			cs.logger.Info("Balance ok", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.String("balance", balance.Balance.Amount.String()))
 		}
 	}
+	return nil
 }
 
 func loadConfig(path string) (*Config, error) {
