@@ -28,7 +28,13 @@ risk of them running out of gas.
 
 ## Configuration
 
-Multiple `chains` blocks are supported.
+Gas Station accepts a configuration file on startup via the `-c` flag.
+
+```sh
+gasstation -c configs/config.toml
+```
+
+An example config file is provided in `configs/config.toml.example`
 
 ```toml
 [[chains]]
