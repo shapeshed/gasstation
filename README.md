@@ -101,6 +101,12 @@ make
 
 The binary will be created at `./bin/gastation`.
 
+A git pre-commit file is available at `./scripts/pre-commit`.
+
+```sh
+cp ./scripts/pre-commit .git/hooks/
+```
+
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
 [3]: configs/config.toml.example
