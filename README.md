@@ -1,7 +1,9 @@
-# Gas Tank
+# Gas Station
 
 Monitor Cosmos account balances and send tokens if an account falls below a
 balance threshold.
+
+![Gas Station](assets/gasstation.png)
 
 ## Configuration
 
