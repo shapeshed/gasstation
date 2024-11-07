@@ -71,3 +71,12 @@ frequency        = 60
 
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
+
+## Logging
+
+Gas Station logs some information whilst running. Log levels can be increased
+with the `LOG_LEVEL` environment variable.
+
+```sh
+LOG_LEVEL=debug gasstation -c configs/config.toml
+```
