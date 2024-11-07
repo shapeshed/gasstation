@@ -1,19 +1,21 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
-version: 1
+project_name: gasstation
+
+version: 2
 
 env:
-  - CGO_ENABLED=0  # Disable CGO if you don't need it for simpler builds
+  - CGO_ENABLED=0  # Disable CGO if not needed for simpler builds
 
 builds:
   - id: gasstation
-    main: ./cmd/gasstation
+    dir: ./cmd/gasstation
     binary: gasstation
     goos:
       - linux
-      - darwin
-      - windows
+      # - darwin
+      # - windows
     goarch:
       - amd64
       - arm64
@@ -58,4 +60,3 @@ release:
   name_template: "v{{ .Version }}"
   footer: |
     **Full Changelog**: https://github.com/your-org/your-repo/compare/{{ .PreviousTag }}...{{ if .IsNightly }}nightly{{ else }}{{ .Tag }}{{ end }}
-
