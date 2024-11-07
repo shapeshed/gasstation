@@ -95,4 +95,4 @@ LOG_LEVEL=debug gasstation -c configs/config.toml
 [1]: https://prometheus.io/
 [2]: https://github.com/QuokkaStake/cosmos-wallets-exporter
 [3]: configs/config.toml.example
-[4]: releases
+[4]: https://github.com/shapeshed/gasstation/releases
