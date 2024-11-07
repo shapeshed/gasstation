@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+echo "Running golangci-lint..."
+golangci-lint run
+
+echo "Running tests..."
+go test ./...
+
+exit 0

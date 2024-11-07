@@ -1,0 +1,18 @@
+[Unit]
+Description=Gas Station
+After=network.target
+
+[Service]
+Type=simple
+User=go
+Environment=LOG_LEVEL=debug
+ExecStart=/usr/local/bin/gasstation -c /home/go/.config/gasstation/config.toml
+
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gasstation
+
+[Install]
+WantedBy=multi-user.target
