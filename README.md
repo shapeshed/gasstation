@@ -60,7 +60,7 @@ frequency        = 60
 | **grpc_url**         | The gRPC URL for interacting with the chain. This URL is used for querying account balances and submitting transactions.                                     |
 | **accounts**         | A list of account addresses to monitor on this chain. Gas Tank will monitor each address and top it up when the balance falls below the specified threshold. |
 | **threshold**        | The minimum balance threshold for each account. When an account's balance drops below this level, Gas Tank will send a specified amount to replenish it.     |
-| **amount_to_fund**   | The amount to send when topping up an account. The amount is specified in the chain's gas denomination (e.g., `1000` units of `untrn`).                      |
+| **amount_to_fund**   | The amount to send when topping up an account. The amount is specified in the chain's gas denomination (e.g., `1000000` units of `untrn`).                   |
 | **frequency**        | The interval (in seconds) at which Gas Tank checks account balances.                                                                                         |
 
 [1]: https://prometheus.io/
