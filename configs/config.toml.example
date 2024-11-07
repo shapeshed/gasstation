@@ -1,0 +1,27 @@
+[[chains]]
+name             = "neutron-testnet"
+gas_denom        = "untrn"
+gas_prices       = "0.0053untrn"
+gas_multiplier   = 2.0
+keyring_app_name = "neutron"
+keyring_backend  = "pass"
+keyring_root_dir = "/home/go"
+keyring_uid      = "gasstation"
+grpc_url         = "neutron-testnet-grpc.polkachu.com:19190"
+accounts         = ["neutron1y3fzmdmlqrhxfjh570cdh74nve5e33apwl2j0t"]
+threshold        = 1000000
+amount_to_fund   = 5000000
+
+[[chains]]
+name             = "osmosis-testnet"
+gas_denom        = "uosmo"
+gas_prices       = "0.025uosmo"
+gas_multiplier   = 2.0
+keyring_backend  = "pass"
+keyring_app_name = "osmosis"
+keyring_root_dir = "/home/go"
+keyring_uid      = "gasstation"
+grpc_url         = "osmosis-testnet-grpc.polkachu.com:12590"
+accounts         = ["osmo1tjghlullrj07eh3g0ev4rwgalm2cs44r8qxxrj"]
+threshold        = 1000000
+amount_to_fund   = 5000000
