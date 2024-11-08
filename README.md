@@ -8,7 +8,7 @@ Automated gas token management for Cosmos accounts.
 
 Pre-built releases are available on the [Releases][4] page.
 
-````sh
+```sh
 VERSION="v0.0.6"
 ARCH="linux_amd64" 
 wget -O /tmp/gasstation_${VERSION}_${ARCH}.tar.gz "https://github.com/shapeshed/gasstation/releases/download/${VERSION}/gasstation_${VERSION}_${ARCH}.tar.gz"
@@ -24,7 +24,7 @@ VERSION=$(git describe --tags --always --dirty --match=v\* 2> /dev/null || echo 
 DATE=$(date +%FT%T%z)
 go install -ldflags="-X main.Version=$VERSION -X main.BuildDate=$DATE" github.com/shapeshed/gasstation/cmd/gasstation@latest
 gasstation --version
-````
+```
 
 ## Configuration
 
