@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.0.7] - 2024-11-07
+
+### Changed
+
+- [`10a82dc`](https://github.com/shapeshed/gasstation/commit/10a82dcd3a87f8e6275f2e91b2eefc153c99d48d) Update cliff regexes
+
 ### Fixed
 
 - [`da44e4e`](https://github.com/shapeshed/gasstation/commit/da44e4e3c17318448582903f180dd673651aeed2) Fix links in CHANGELOG
 - [`92f9371`](https://github.com/shapeshed/gasstation/commit/92f9371edf77a8b9217111b3b199d291ccc713b2) Fix links in CHANGELOG
+- [`5ec429d`](https://github.com/shapeshed/gasstation/commit/5ec429d2e682d9797dd13a65ad2897bc6cdae17d) Fix link formatting
 
 ## [0.0.6] - 2024-11-07
 
@@ -101,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`9f9d441`](https://github.com/shapeshed/gasstation/commit/9f9d4414e82074ade457e6120552f00ce0efe365) Link to example config
 - [`06526b9`](https://github.com/shapeshed/gasstation/commit/06526b979fda60066b3ddb426b43d8900f67a073) Logging cleanup
 
-[unreleased]: https://github.com/shapeshed/gasstation/compare/v0.0.6..HEAD
+[0.0.7]: https://github.com/shapeshed/gasstation/compare/v0.0.6..v0.0.7
 [0.0.6]: https://github.com/shapeshed/gasstation/compare/v0.0.5..v0.0.6
 [0.0.5]: https://github.com/shapeshed/gasstation/compare/v0.0.4..v0.0.5
 [0.0.4]: https://github.com/shapeshed/gasstation/compare/v0.0.3..v0.0.4

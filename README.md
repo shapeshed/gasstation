@@ -4,39 +4,27 @@ Automated gas token management for Cosmos accounts.
 
 ![Gas Station](assets/gasstation.png)
 
-## Rationale
-
-Gas Tank was developed to address the challenge of running multiple Cosmos-based
-bots and ensuring they consistently maintain sufficient funds for gas fees.
-
-While it is possible to monitor account balances with tools like [Prometheus][1]
-using [Cosmos Wallet Exporter][2] these tools only generate alerts when an
-account balance falls below a specified threshold. In such a setup, a human
-operator must manually respond to each alert and send a bank transaction to
-replenish each account, making it a time-intensive process prone to delays and
-error.
-
-Gas Tank largely automates this process by continuously monitoring account
-balances and automatically initiating a bank transaction when an account’s
-balance falls below a designated threshold. This automation reduces the need for
-manual intervention, helping to keep bots running smoothly and minimizing the
-risk of them running out of gas.
-
-> [!NOTE]\
-> Ensure that the account used for issuing automated bank transactions is
-> actively monitored.
-
-## Releases
+## Installation
 
 Pre-built releases are available on the [Releases][4] page.
 
-## Installation
+````sh
+VERSION="v0.0.6"
+ARCH="linux_amd64" 
+wget -O /tmp/gasstation_${VERSION}_${ARCH}.tar.gz "https://github.com/shapeshed/gasstation/releases/download/${VERSION}/gasstation_${VERSION}_${ARCH}.tar.gz"
+tar -xzf /tmp/gasstation_${VERSION}_${ARCH}.tar.gz -C /tmp
+sudo mv /tmp/gasstation /usr/local/bin/gasstation
+gasstation --version
+```
+
+You can also use `go install` if you prefer.
 
 ```sh
 VERSION=$(git describe --tags --always --dirty --match=v\* 2> /dev/null || echo v0)
 DATE=$(date +%FT%T%z)
 go install -ldflags="-X main.Version=$VERSION -X main.BuildDate=$DATE" github.com/shapeshed/gasstation/cmd/gasstation@latest
-```
+gasstation --version
+````
 
 ## Configuration
 
@@ -89,6 +77,28 @@ with the `LOG_LEVEL` environment variable.
 ```sh
 LOG_LEVEL=debug gasstation -c ~/.config/gasstation/config.toml
 ```
+
+## Rationale
+
+Gas Tank was developed to address the challenge of running multiple Cosmos-based
+bots and ensuring they consistently maintain sufficient funds for gas fees.
+
+While it is possible to monitor account balances with tools like [Prometheus][1]
+using [Cosmos Wallet Exporter][2] these tools only generate alerts when an
+account balance falls below a specified threshold. In such a setup, a human
+operator must manually respond to each alert and send a bank transaction to
+replenish each account, making it a time-intensive process prone to delays and
+error.
+
+Gas Tank largely automates this process by continuously monitoring account
+balances and automatically initiating a bank transaction when an account’s
+balance falls below a designated threshold. This automation reduces the need for
+manual intervention, helping to keep bots running smoothly and minimizing the
+risk of them running out of gas.
+
+> [!NOTE]\
+> Ensure that the account used for issuing automated bank transactions is
+> actively monitored.
 
 ## Contributing
 
