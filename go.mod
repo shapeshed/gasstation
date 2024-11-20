@@ -3,7 +3,7 @@ module github.com/shapeshed/gasstation
 go 1.23.2
 
 require (
-	cosmossdk.io/math v1.3.0
+	cosmossdk.io/math v1.4.0
 	github.com/BurntSushi/toml v1.4.0
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.10
