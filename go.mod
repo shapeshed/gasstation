@@ -9,7 +9,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.10
 	github.com/shapeshed/cosmosign v0.2.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.68.0
+	google.golang.org/grpc v1.68.1
 )
 
 require (
