@@ -11,8 +11,8 @@ In this example a treasury wants to fund multiple bot accounts.
 - Treasury account funds Gas Station
 - Gas Station checks the balance of accounts it knows about and tops up accounts
   if they fall below a threshold.
-- [Prometheus][1] monitors Gas Stations balance via
-  [cosmos-wallets-exporter][2], trigger an alert when it falls below a threshold
+- [Prometheus][1] monitors Gas Stations balance via [cosmos-wallets-exporter][2]
+  and triggers an alert when it falls below a threshold
 
 ![Architecture Diagram][5]
 
