@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.0.7] - 2025-02-10
+
+### Added
+
+- [`5735c27`](https://github.com/shapeshed/gasstation/commit/5735c2787f20d4b47a474b6c0a5066538d0b8743) Add reference deployment diagram
+
 ### Changed
 
 - [`10a82dc`](https://github.com/shapeshed/gasstation/commit/10a82dcd3a87f8e6275f2e91b2eefc153c99d48d) Update cliff regexes
 - [`8e90e23`](https://github.com/shapeshed/gasstation/commit/8e90e23f7c31e3937dab4c5ac79d90f81e3dbae0) Update README
+- [`435eb10`](https://github.com/shapeshed/gasstation/commit/435eb106c73d226f5209966540169a59789389db) Update CHANGELOG
 
 ### Fixed
 
@@ -17,10 +23,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`92f9371`](https://github.com/shapeshed/gasstation/commit/92f9371edf77a8b9217111b3b199d291ccc713b2) Fix links in CHANGELOG
 - [`5ec429d`](https://github.com/shapeshed/gasstation/commit/5ec429d2e682d9797dd13a65ad2897bc6cdae17d) Fix link formatting
 - [`c371464`](https://github.com/shapeshed/gasstation/commit/c371464b42ba19ae9fec5f1f0b4755407873f7e7) Fix README formatting
+- [`1267607`](https://github.com/shapeshed/gasstation/commit/1267607f2838557122d8947f01eeebe481d2fd70) Fix go version for CodeQL
 
 ### Others
 
+- [`851356c`](https://github.com/shapeshed/gasstation/commit/851356ca2c7abe68a95d94408de4ebe37910bc34) README fix
+
+### Security
+
 - [`6f82c42`](https://github.com/shapeshed/gasstation/commit/6f82c4220657fc8dbd53c515870e0f60849ced48) Bump google.golang.org/grpc from 1.67.1 to 1.68.0 (#2)
+- [`bcfbb9a`](https://github.com/shapeshed/gasstation/commit/bcfbb9a2caeff59a2d8a395c7029d1db4dc41bc6) Bump github.com/cometbft/cometbft in the go_modules group (#3)
+- [`bfbe609`](https://github.com/shapeshed/gasstation/commit/bfbe6096b73c68fee1aca6f72ae574aceea5d804) Bump cosmossdk.io/math from 1.3.0 to 1.4.0 in the go_modules group (#4)
+- [`d53c99c`](https://github.com/shapeshed/gasstation/commit/d53c99cb93cc2567af20138979421690241ebcac) Bump google.golang.org/grpc from 1.68.0 to 1.68.1 (#5)
+- [`852a29c`](https://github.com/shapeshed/gasstation/commit/852a29cf03a124618e90dff8e541d0416df5e59d) Bump cosmossdk.io/math from 1.4.0 to 1.5.0 (#10)
+- [`7520ec9`](https://github.com/shapeshed/gasstation/commit/7520ec97fe341916d4d7c57e0ae1f138a1f80d9d) Bump golang.org/x/crypto from 0.28.0 to 0.31.0 in the go_modules group (#6)
+- [`46274bb`](https://github.com/shapeshed/gasstation/commit/46274bb4769236f5fedd09a9698f54b2589447c8) Bump github.com/cosmos/cosmos-sdk from 0.50.10 to 0.50.11 (#8)
+- [`3a7c5dc`](https://github.com/shapeshed/gasstation/commit/3a7c5dcb4f1cf2eb13bd2cc6f64477f5c10d5ec6) Bump the go_modules group across 1 directory with 2 updates (#13)
+- [`0408354`](https://github.com/shapeshed/gasstation/commit/0408354e54b4e37ccb693aa1e684a941afeaed97) Bump google.golang.org/grpc from 1.68.1 to 1.70.0 (#14)
+- [`92b6f8f`](https://github.com/shapeshed/gasstation/commit/92b6f8f5ca118478a53cd3057b6bb1d5c61ca69a) Bump the go_modules group with 3 updates (#15)
 
 ## [0.0.6] - 2024-11-07
 
@@ -69,7 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`e24dae1`](https://github.com/shapeshed/gasstation/commit/e24dae1925e7a211d481a91d85b9a248d38d48fb) Fix formatting of binary path
 - [`616f080`](https://github.com/shapeshed/gasstation/commit/616f080610d078b5bd7191c08e6831752eb4db4f) Fix releases link
 
-### Others
+### Security
 
 - [`022fb09`](https://github.com/shapeshed/gasstation/commit/022fb093d47b838a28acde7814af7a584fd89f3b) Bump go.uber.org/zap from 1.24.0 to 1.27.0 (#1)
 
@@ -112,7 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`9f9d441`](https://github.com/shapeshed/gasstation/commit/9f9d4414e82074ade457e6120552f00ce0efe365) Link to example config
 - [`06526b9`](https://github.com/shapeshed/gasstation/commit/06526b979fda60066b3ddb426b43d8900f67a073) Logging cleanup
 
-[unreleased]: https://github.com/shapeshed/gasstation/compare/v0.0.6..HEAD
+[0.0.7]: https://github.com/shapeshed/gasstation/compare/v0.0.6..v0.0.7
 [0.0.6]: https://github.com/shapeshed/gasstation/compare/v0.0.5..v0.0.6
 [0.0.5]: https://github.com/shapeshed/gasstation/compare/v0.0.4..v0.0.5
 [0.0.4]: https://github.com/shapeshed/gasstation/compare/v0.0.3..v0.0.4
