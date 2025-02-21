@@ -7,7 +7,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.12
-	github.com/shapeshed/cosmosign v0.2.0
+	github.com/shapeshed/cosmosign v0.2.1
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.70.0
 )
