@@ -620,8 +620,8 @@ github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da/go.mod h1:gi+0
 github.com/sasha-s/go-deadlock v0.3.5 h1:tNCOEEDG6tBqrNDOX35j/7hL5FcFViG6awUGROb2NsU=
 github.com/sasha-s/go-deadlock v0.3.5/go.mod h1:bugP6EGbdGYObIlx7pUZtWqlvo8k9H6vCBBsiChJQ5U=
 github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529/go.mod h1:DxrIzT+xaE7yg65j358z/aeFdxmN0P9QXhEzd20vsDc=
-github.com/shapeshed/cosmosign v0.2.0 h1:bw4csmnUEK1tzZqs7URzVMftrTkrFycRPrBX/LEt2mU=
-github.com/shapeshed/cosmosign v0.2.0/go.mod h1:HJzLd6lug89mG4eTJMuf72+XkfprBXpP1c0+2FuZkbw=
+github.com/shapeshed/cosmosign v0.2.1 h1:DJT2ACiOIDOHizoZSpwKE8xbYpPxS51JYzwwFxVMMpk=
+github.com/shapeshed/cosmosign v0.2.1/go.mod h1:YkV/sHrUVRDKAuQALEpBy6xaZMfbw6JOYkkIPIMG/xI=
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
