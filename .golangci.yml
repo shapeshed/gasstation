@@ -27,8 +27,8 @@ linters:
     - stylecheck
     - revive
     - typecheck
-    - tenv
     - unconvert
+    - usetesting
     # Prefer unparam over revive's unused param. It is more thorough in its checking.
     - unparam
     - unused
