@@ -151,6 +151,9 @@ func (cs *ChainService) Run(ctx context.Context) {
 
 // checkBalances checks the balance for each account and sends a bank transaction if below the threshold.
 func (cs *ChainService) checkBalances(ctx context.Context) error {
+	var msgs []sdktypes.Msg
+	var accountsToFund []string
+
 	for _, account := range cs.chain.Accounts {
 		balance, err := queries.GetBalance(ctx, cs.bankQueryClient, account, cs.chain.GasDenom)
 		if err != nil {
@@ -162,43 +165,52 @@ func (cs *ChainService) checkBalances(ctx context.Context) error {
 		threshold := sdkmath.NewInt(cs.chain.Threshold)
 		if balance.Balance.Amount.LT(threshold) {
 			cs.logger.Info("Balance is less than threshold, funding required", zap.String("chain", cs.chain.Name), zap.String("account", account))
-
-			signer, err := cs.keyring.Key(cs.chain.KeyringUID)
-			if err != nil {
-				cs.logger.Error("Error getting signer", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.Error(err))
-				return err
-			}
-
-			pk, _ := signer.GetPubKey()
-			addressBytes := sdktypes.AccAddress(pk.Address().Bytes())
-			signerAddress, _ := sdktypes.Bech32ifyAddressBytes(cs.chain.AddressPrefix, addressBytes)
-			cs.logger.Debug("address", zap.String("signerAddress", signerAddress), zap.String("account", account), zap.String("prefix", cs.chain.AddressPrefix))
-
-			msg := &banktypes.MsgSend{
-				FromAddress: signerAddress,
-				ToAddress:   account,
-				Amount:      sdktypes.NewCoins(sdktypes.NewCoin(cs.chain.GasDenom, sdkmath.NewInt(cs.chain.AmountToFund))),
-			}
-
-			cs.logger.Debug("msg", zap.Any("msg", msg))
-
-			// Send the message using Cosmosign
-			res, err := cs.cosmosignClient.SendMessages(msg)
-			if err != nil {
-				cs.logger.Error("Failed to send transaction", zap.Error(err))
-				return err
-			}
-			if res.TxResponse.Code != 0 {
-				err = fmt.Errorf("transaction failed with code %d: %s", res.TxResponse.Code, res.TxResponse.RawLog)
-				cs.logger.Error("Transaction failed", zap.Error(err))
-				return err
-			}
-
-			cs.logger.Info("Transaction successful", zap.String("transaction hash", res.TxResponse.TxHash), zap.String("chain", cs.chain.Name), zap.String("account", account))
-		} else {
-			cs.logger.Info("Balance ok", zap.String("chain", cs.chain.Name), zap.String("account", account), zap.String("balance", balance.Balance.Amount.String()))
+			accountsToFund = append(accountsToFund, account)
 		}
 	}
+
+	// No accounts need funding, return early
+	if len(accountsToFund) == 0 {
+		cs.logger.Info("All balances are above threshold, no funding required", zap.String("chain", cs.chain.Name))
+		return nil
+	}
+
+	// Get signer information once
+	signer, err := cs.keyring.Key(cs.chain.KeyringUID)
+	if err != nil {
+		cs.logger.Error("Error getting signer", zap.String("chain", cs.chain.Name), zap.Error(err))
+		return err
+	}
+
+	pk, _ := signer.GetPubKey()
+	addressBytes := sdktypes.AccAddress(pk.Address().Bytes())
+	signerAddress, _ := sdktypes.Bech32ifyAddressBytes(cs.chain.AddressPrefix, addressBytes)
+	cs.logger.Debug("signer address", zap.String("signerAddress", signerAddress))
+
+	// Construct all MsgSend messages
+	for _, account := range accountsToFund {
+		msg := &banktypes.MsgSend{
+			FromAddress: signerAddress,
+			ToAddress:   account,
+			Amount:      sdktypes.NewCoins(sdktypes.NewCoin(cs.chain.GasDenom, sdkmath.NewInt(cs.chain.AmountToFund))),
+		}
+		msgs = append(msgs, msg)
+		cs.logger.Debug("msg prepared", zap.Any("msg", msg))
+	}
+
+	// Send the batch transaction
+	res, err := cs.cosmosignClient.SendMessages(msgs...)
+	if err != nil {
+		cs.logger.Error("Failed to send batch transaction", zap.Error(err))
+		return err
+	}
+	if res.TxResponse.Code != 0 {
+		err = fmt.Errorf("transaction failed with code %d: %s", res.TxResponse.Code, res.TxResponse.RawLog)
+		cs.logger.Error("Transaction failed", zap.Error(err))
+		return err
+	}
+
+	cs.logger.Info("Transaction successful", zap.String("transaction hash", res.TxResponse.TxHash), zap.String("chain", cs.chain.Name))
 	return nil
 }
 
