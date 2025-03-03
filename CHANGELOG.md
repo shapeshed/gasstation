@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-03-03
+
+### Fixed
+
+- [`203f3f9`](https://github.com/shapeshed/gasstation/commit/203f3f9c7acc44bc3693086b63dbacc67a0d62fe) Fix multiple messages causing sequence error
+
+### Others
+
+- [`28f38bb`](https://github.com/shapeshed/gasstation/commit/28f38bbd687e58289225f7a4b943169c6615b89a) Migrate to Go 1.24 and tools
+
+### Security
+
+- [`1d7b24d`](https://github.com/shapeshed/gasstation/commit/1d7b24d6af04309e307ac4458746866af18856c8) Bump the go_modules group with 2 updates (#17)
+- [`f892b7e`](https://github.com/shapeshed/gasstation/commit/f892b7ebf1e33e3cdb820b13f5bf9bc6d2a21d68) Bump github.com/shapeshed/cosmosign from 0.2.0 to 0.2.1 (#16)
+
 ## [0.0.7] - 2025-02-10
 
 ### Added
@@ -28,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Others
 
 - [`851356c`](https://github.com/shapeshed/gasstation/commit/851356ca2c7abe68a95d94408de4ebe37910bc34) README fix
+- [`23a4359`](https://github.com/shapeshed/gasstation/commit/23a435966a1a64d8c8e6c1eacf4ffb3e2fa274b1) Release v0.0.7
 
 ### Security
 
@@ -132,6 +148,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`9f9d441`](https://github.com/shapeshed/gasstation/commit/9f9d4414e82074ade457e6120552f00ce0efe365) Link to example config
 - [`06526b9`](https://github.com/shapeshed/gasstation/commit/06526b979fda60066b3ddb426b43d8900f67a073) Logging cleanup
 
+[0.0.8]: https://github.com/shapeshed/gasstation/compare/v0.0.7..v0.0.8
 [0.0.7]: https://github.com/shapeshed/gasstation/compare/v0.0.6..v0.0.7
 [0.0.6]: https://github.com/shapeshed/gasstation/compare/v0.0.5..v0.0.6
 [0.0.5]: https://github.com/shapeshed/gasstation/compare/v0.0.4..v0.0.5
