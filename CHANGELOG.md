@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.9] - 2025-03-05
+
+### Added
+
+- [`8930e65`](https://github.com/shapeshed/gasstation/commit/8930e65e1d5c773fa817a2361cf237aba559b0aa) Add missing frequency
+- [`41f115e`](https://github.com/shapeshed/gasstation/commit/41f115e95ef4730394d2a60e8d82fcee1a200360) Add GRPC TLS option
+
+### Removed
+
+- [`02bac6b`](https://github.com/shapeshed/gasstation/commit/02bac6bc6504a2caaac08688b541e4b77b30bd4b) Remove example
+- [`4e16276`](https://github.com/shapeshed/gasstation/commit/4e16276f592917a64e97b9b113986a090667feba) Remove stray R files
+
 ## [0.0.8] - 2025-03-03
 
 ### Fixed
@@ -14,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Others
 
 - [`28f38bb`](https://github.com/shapeshed/gasstation/commit/28f38bbd687e58289225f7a4b943169c6615b89a) Migrate to Go 1.24 and tools
+- [`68cdd18`](https://github.com/shapeshed/gasstation/commit/68cdd187d38c45b98aa59dc4e1e9a32d2836c49d) Prepare for Release v0.0.8
 
 ### Security
 
@@ -148,6 +161,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`9f9d441`](https://github.com/shapeshed/gasstation/commit/9f9d4414e82074ade457e6120552f00ce0efe365) Link to example config
 - [`06526b9`](https://github.com/shapeshed/gasstation/commit/06526b979fda60066b3ddb426b43d8900f67a073) Logging cleanup
 
+[0.0.9]: https://github.com/shapeshed/gasstation/compare/v0.0.8..v0.0.9
 [0.0.8]: https://github.com/shapeshed/gasstation/compare/v0.0.7..v0.0.8
 [0.0.7]: https://github.com/shapeshed/gasstation/compare/v0.0.6..v0.0.7
 [0.0.6]: https://github.com/shapeshed/gasstation/compare/v0.0.5..v0.0.6
