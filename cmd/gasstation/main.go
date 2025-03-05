@@ -31,6 +31,7 @@ type Chain struct {
 	Name           string   `toml:"name"`
 	AddressPrefix  string   `toml:"address_prefix"`
 	GRPCURL        string   `toml:"grpc_url"`
+	GRPCTLS        bool     `toml:"grpc_tls"`
 	GasDenom       string   `toml:"gas_denom"`
 	GasPrices      string   `toml:"gas_prices"`
 	GasMultipler   float64  `toml:"gas_multiplier"`
@@ -80,7 +81,7 @@ func NewChainService(chain Chain, interval time.Duration, l *zap.Logger) (*Chain
 	ctx := context.Background()
 
 	// Initialize a GRPC connection
-	conn, err := grpc.SetupGRPCConnection(chain.GRPCURL, false)
+	conn, err := grpc.SetupGRPCConnection(chain.GRPCURL, chain.GRPCTLS)
 	if err != nil {
 		return nil, err
 	}
