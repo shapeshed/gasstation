@@ -6,7 +6,7 @@ require (
 	cosmossdk.io/math v1.5.0
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/cenkalti/backoff/v4 v4.3.0
-	github.com/cosmos/cosmos-sdk v0.50.12
+	github.com/cosmos/cosmos-sdk v0.50.13
 	github.com/shapeshed/cosmosign v0.2.1
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.71.0
