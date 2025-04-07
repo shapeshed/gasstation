@@ -1,8 +1,9 @@
 module github.com/shapeshed/gasstation
 
 go 1.24.0
+
 require (
-	cosmossdk.io/math v1.5.1
+	cosmossdk.io/math v1.5.3
 	github.com/BurntSushi/toml v1.5.0
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.13
@@ -59,7 +60,6 @@ require (
 	github.com/charithe/durationcheck v0.0.10 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
 	github.com/ckaznocha/intrange v0.3.0 // indirect
-	github.com/cockroachdb/apd/v3 v3.2.1 // indirect
 	github.com/cockroachdb/errors v1.11.3 // indirect
 	github.com/cockroachdb/fifo v0.0.0-20240606204812-0bbfbd93a7ce // indirect
 	github.com/cockroachdb/logtags v0.0.0-20230118201751-21c54148d20b // indirect
