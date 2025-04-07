@@ -1,6 +1,7 @@
 module github.com/shapeshed/gasstation
 
 go 1.24.0
+
 require (
 	cosmossdk.io/math v1.5.1
 	github.com/BurntSushi/toml v1.5.0
@@ -8,7 +9,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.13
 	github.com/shapeshed/cosmosign v0.2.1
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.71.0
+	google.golang.org/grpc v1.71.1
 )
 
 require (
