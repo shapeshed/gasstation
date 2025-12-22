@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	cosmossdk.io/math v1.5.3
-	github.com/BurntSushi/toml v1.5.0
+	github.com/BurntSushi/toml v1.6.0
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cosmos/cosmos-sdk v0.50.13
 	github.com/shapeshed/cosmosign v0.2.1
